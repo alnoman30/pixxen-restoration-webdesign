@@ -5,24 +5,24 @@
 
 @theme {
     /* Brand Colors */
-    --color-orange: #FE5229;  
-    --color-yellow: #FEC200;     
-    --color-blue: #2299DE;   
-    --color-blue2: #0476B8;   
-    --color-green: #4D7C14; 
+    --color-orange: #FE5229;
+    --color-yellow: #FEC200;
+    --color-blue: #2299DE;
+    --color-blue2: #0476B8;
+    --color-green: #4D7C14;
 
     /* Neutrals & Backgrounds */
-    --color-dark: #11171F;    
-    --color-dark2: #28303B;   
-    --color-gray: #93A3B8;      
-    --color-gray2: #EEF0F3;     
-    --color-gray3: #566477;     
-    
+    --color-dark: #11171F;
+    --color-dark2: #28303B;
+    --color-gray: #93A3B8;
+    --color-gray2: #EEF0F3;
+    --color-gray3: #566477;
+
     /* Light Tints / Muted Backgrounds */
-    --color-soft-orange: #FFDED7;   
-    --color-soft-blue: #EEF8FF;      
-    --color-soft-green: #EEF8E3; 
-    
+    --color-soft-orange: #FFDED7;
+    --color-soft-blue: #EEF8FF;
+    --color-soft-green: #EEF8E3;
+
     /* Shades colors */
     --color-dark-shade2: #1F382F;
     --color-dark-shade3: #29473C;
@@ -842,13 +842,40 @@ html.lenis body {
 
 
 /* Restoration design css (Noman) */
-.common-paragraph p{
+.common-paragraph p {
     font-weight: 400 !important;
 }
+
+/* stack card */
 .restoration-card-wrapper {
-  position: relative;
+    position: relative;
 }
 
 .restoration-card {
-  will-change: transform, filter;
+    will-change: transform, filter;
+}
+
+/* stack card */
+
+/* reveal image */
+.restoration-reveal-image {
+    position: relative;
+    overflow: hidden;
+    --reveal-height: 0%;
+}
+
+.restoration-reveal-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    height: var(--reveal-height);
+    bottom: 0;
+    top: auto;
+    background: #FEC200;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.restoration-reveal-image-img {
+    opacity: 0;
 }

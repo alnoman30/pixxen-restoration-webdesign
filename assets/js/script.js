@@ -1940,13 +1940,19 @@ function initStackCards({
   wrapper,
   card,
   section,
-  stackRatio = 0.25
+  stackRatio = 0.25,
+  mobileStackRatio = 0.10
 }) {
   const cards = gsap.utils.toArray(wrapper);
 
   if (!cards.length) return;
 
-  const stackHeight = window.innerHeight * stackRatio;
+  const currentRatio =
+    window.innerWidth < 768
+      ? mobileStackRatio
+      : stackRatio;
+
+  const stackHeight = window.innerHeight * currentRatio;
 
   cards.forEach((item, i) => {
     const innerCard = item.querySelector(card);
@@ -2010,5 +2016,55 @@ function initStackCards({
 initStackCards({
   wrapper: ".restoration-card-wrapper",
   card: ".restoration-card",
-  section: ".restoration-stack-section"
+  section: ".restoration-stack-section",
+  stackRatio: 0.25,
+  mobileStackRatio: 0.10
 });
+
+// 
+function initImageReveal(selector) {
+  const containers = document.querySelectorAll(selector);
+
+  containers.forEach((container) => {
+    const image = container.querySelector("img");
+
+    if (!image) return;
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: container,
+        start: "top 85%",
+        toggleActions: "play none none reset"
+      }
+    });
+
+    tl.to(container, {
+      duration: 0.8,
+      "--reveal-height": "100%",
+      ease: "power2.inOut"
+    })
+      .to(container, {
+        duration: 0.8,
+        "--reveal-height": "0%",
+        ease: "power2.inOut"
+      })
+      .to(
+        image,
+        {
+          opacity: 1,
+          duration: 0.1
+        },
+        "-=0.8"
+      )
+      .from(
+        image,
+        {
+          scale: 1.3,
+          duration: 1,
+          ease: "power2.out"
+        },
+        "-=0.9"
+      );
+  });
+}
+initImageReveal(".restoration-reveal-image");

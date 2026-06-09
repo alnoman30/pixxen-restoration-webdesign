@@ -2354,6 +2354,25 @@ html.lenis, html.lenis body {
 .restoration-card {
   will-change: transform, filter;
 }
+.restoration-reveal-image {
+  position: relative;
+  overflow: hidden;
+  --reveal-height: 0%;
+}
+.restoration-reveal-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  height: var(--reveal-height);
+  bottom: 0;
+  top: auto;
+  background: #FEC200;
+  z-index: 2;
+  pointer-events: none;
+}
+.restoration-reveal-image-img {
+  opacity: 0;
+}
 @property --tw-translate-x {
   syntax: "*";
   inherits: false;
