@@ -1933,3 +1933,82 @@ document.addEventListener('DOMContentLoaded', function () {
     initTextTicker('#dental-text-ticker');
 
 });
+
+
+// Crd stack animation
+function initStackCards({
+  wrapper,
+  card,
+  section,
+  stackRatio = 0.25
+}) {
+  const cards = gsap.utils.toArray(wrapper);
+
+  if (!cards.length) return;
+
+  const stackHeight = window.innerHeight * stackRatio;
+
+  cards.forEach((item, i) => {
+    const innerCard = item.querySelector(card);
+
+    if (!innerCard) return;
+
+    gsap.fromTo(
+      innerCard,
+      {
+        scale: 1,
+        filter: "blur(0px)",
+        transformOrigin: "center top"
+      },
+      {
+        y: gsap.utils.mapRange(
+          1,
+          cards.length,
+          -20,
+          -stackHeight,
+          cards.length - i
+        ),
+        scale: gsap.utils.mapRange(
+          1,
+          cards.length,
+          0.75,
+          0.96,
+          i
+        ),
+        filter:
+          "blur(" +
+          gsap.utils.mapRange(
+            1,
+            cards.length,
+            2,
+            12,
+            cards.length - i
+          ) +
+          "px)",
+        ease: "none",
+        scrollTrigger: {
+          trigger: item,
+          start: `top ${stackHeight}`,
+          end: "+=150%",
+          scrub: true,
+          invalidateOnRefresh: true
+        }
+      }
+    );
+
+    ScrollTrigger.create({
+      trigger: item,
+      start: `top ${stackHeight}`,
+      end: () =>
+        document.querySelector(section)?.offsetHeight ||
+        window.innerHeight,
+      pin: true,
+      pinSpacing: false
+    });
+  });
+}
+initStackCards({
+  wrapper: ".restoration-card-wrapper",
+  card: ".restoration-card",
+  section: ".restoration-stack-section"
+});

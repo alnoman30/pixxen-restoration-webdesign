@@ -7,7 +7,8 @@
     /* Brand Colors */
     --color-orange: #FE5229;  
     --color-yellow: #FEC200;     
-    --color-blue: #0476B8;   
+    --color-blue: #2299DE;   
+    --color-blue2: #0476B8;   
     --color-green: #4D7C14; 
 
     /* Neutrals & Backgrounds */
@@ -838,3 +839,16 @@ html.lenis body {
 
 
 /*  */
+
+
+/* Restoration design css (Noman) */
+.common-paragraph p{
+    font-weight: 400 !important;
+}
+.restoration-card-wrapper {
+  position: relative;
+}
+
+.restoration-card {
+  will-change: transform, filter;
+}
