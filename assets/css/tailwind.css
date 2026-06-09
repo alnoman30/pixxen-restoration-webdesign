@@ -871,7 +871,7 @@ html.lenis body {
     height: var(--reveal-height);
     bottom: 0;
     top: auto;
-    background: #FEC200;
+    background: linear-gradient(90deg, #FE5229 0%, #FEC200 100%);
     z-index: 2;
     pointer-events: none;
 }
