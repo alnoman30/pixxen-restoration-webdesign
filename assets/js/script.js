@@ -1828,9 +1828,7 @@ if (allIndustriesGrid) {
 
 
 
-// Pixxen Restoration js start from here (Noman)
-
-
+// ==============Pixxen Restoration js start from here (Noman) ====================
 
 
 // Restoration FAQ section
@@ -1905,34 +1903,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-
-
-// dental marque slide
-document.addEventListener('DOMContentLoaded', function () {
-
-    function initTextTicker(selector) {
-        document.querySelectorAll(selector).forEach((slider) => {
-            new Splide(slider, {
-                type: 'loop',
-                drag: 'free',
-                focus: 'center',
-                perPage: 6,
-                autoWidth: true,
-                gap: 0,
-                arrows: false,
-                pagination: false,
-                autoScroll: {
-                    speed: 2,
-                    pauseOnHover: false,
-                    pauseOnFocus: false,
-                },
-            }).mount(window.splide.Extensions);
-        });
-    }
-
-    initTextTicker('#dental-text-ticker');
-
-});
 
 
 // Crd stack animation
@@ -2021,7 +1991,7 @@ initStackCards({
   mobileStackRatio: 0.10
 });
 
-// 
+// image reveal
 function initImageReveal(selector) {
   const containers = document.querySelectorAll(selector);
 
@@ -2068,3 +2038,51 @@ function initImageReveal(selector) {
   });
 }
 initImageReveal(".restoration-reveal-image");
+
+// Half Circle SVG animation
+gsap.utils.toArray(".restoration-svg-anm").forEach((section) => {
+  
+  const left = section.querySelector(".leaf-left");
+  const right = section.querySelector(".leaf-right");
+
+  // Initial setup
+  gsap.set(left, {
+    scale: 0,
+    rotation: -20,
+    opacity: 0,         
+    transformOrigin: "bottom left"
+  });
+
+  gsap.set(right, {
+    scale: 0,
+    rotation: 20,
+    opacity: 0,          
+    transformOrigin: "top right"
+  });
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: section,
+      start: "top 80%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  // Animate left leaf
+  tl.to(left, {
+    scale: 1,
+    rotation: 0,
+    opacity: 1,          
+    duration: 1.2,
+    ease: "power3.out"
+  });
+
+  // Animate right leaf, overlapping timing
+  tl.to(right, {
+    scale: 1,
+    rotation: 0,
+    opacity: 1,        
+    duration: 1.2,
+    ease: "power3.out"
+  }, "-=1.0"); // overlap
+});
