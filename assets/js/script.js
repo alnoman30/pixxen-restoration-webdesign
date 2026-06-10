@@ -1906,183 +1906,84 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // Crd stack animation
-function initStackCards({
-  wrapper,
-  card,
-  section,
-  stackRatio = 0.25,
-  mobileStackRatio = 0.10
-}) {
-  const cards = gsap.utils.toArray(wrapper);
+gsap.registerPlugin(ScrollTrigger);
 
-  if (!cards.length) return;
+const cards = gsap.utils.toArray(".restoration-card-wrapper");
 
-  const currentRatio =
-    window.innerWidth < 768
-      ? mobileStackRatio
-      : stackRatio;
+// set initial state once (IMPORTANT: no dynamic z-index)
+cards.forEach((card, i) => {
 
-  const stackHeight = window.innerHeight * currentRatio;
-
-  cards.forEach((item, i) => {
-    const innerCard = item.querySelector(card);
-
-    if (!innerCard) return;
-
-    gsap.fromTo(
-      innerCard,
-      {
-        scale: 1,
-        filter: "blur(0px)",
-        transformOrigin: "center top"
-      },
-      {
-        y: gsap.utils.mapRange(
-          1,
-          cards.length,
-          -20,
-          -stackHeight,
-          cards.length - i
-        ),
-        scale: gsap.utils.mapRange(
-          1,
-          cards.length,
-          0.75,
-          0.96,
-          i
-        ),
-        filter:
-          "blur(" +
-          gsap.utils.mapRange(
-            1,
-            cards.length,
-            2,
-            12,
-            cards.length - i
-          ) +
-          "px)",
-        ease: "none",
-        scrollTrigger: {
-          trigger: item,
-          start: `top ${stackHeight}`,
-          end: "+=150%",
-          scrub: true,
-          invalidateOnRefresh: true
-        }
-      }
-    );
-
-    ScrollTrigger.create({
-      trigger: item,
-      start: `top ${stackHeight}`,
-      end: () =>
-        document.querySelector(section)?.offsetHeight ||
-        window.innerHeight,
-      pin: true,
-      pinSpacing: false
-    });
+  gsap.set(card, {
+    scale: 1,
+    rotateX: 0,
+    y: 0,
+    transformPerspective: 1000,
+    transformOrigin: "center top",
+    zIndex: cards.length + i
   });
-}
-initStackCards({
-  wrapper: ".restoration-card-wrapper",
-  card: ".restoration-card",
-  section: ".restoration-stack-section",
-  stackRatio: 0.25,
-  mobileStackRatio: 0.10
+
+    gsap.to(card, {
+    scale: 0.98,
+    rotateX: -0.8,
+    y: -10,
+    opacity: 1,
+    ease: "none",
+    scrollTrigger: {
+        trigger: card,
+        start: "top 30%",
+        end: "bottom bottom",
+        scrub: true,
+        invalidateOnRefresh: true
+    }
+    });
+
 });
 
-// image reveal
-function initImageReveal(selector) {
-  const containers = document.querySelectorAll(selector);
+// optional: refresh fix for layout shifts/images/fonts
+window.addEventListener("load", () => {
+  ScrollTrigger.refresh();
+});
 
-  containers.forEach((container) => {
-    const image = container.querySelector("img");
-
-    if (!image) return;
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: container,
-        start: "top 85%",
-        toggleActions: "play none none reset"
-      }
-    });
-
-    tl.to(container, {
-      duration: 0.8,
-      "--reveal-height": "100%",
-      ease: "power2.inOut"
-    })
-      .to(container, {
-        duration: 0.8,
-        "--reveal-height": "0%",
-        ease: "power2.inOut"
-      })
-      .to(
-        image,
-        {
-          opacity: 1,
-          duration: 0.1
-        },
-        "-=0.8"
-      )
-      .from(
-        image,
-        {
-          scale: 1.3,
-          duration: 1,
-          ease: "power2.out"
-        },
-        "-=0.9"
-      );
-  });
-}
-initImageReveal(".restoration-reveal-image");
 
 // Half Circle SVG animation
 gsap.utils.toArray(".restoration-svg-anm").forEach((section) => {
-  
   const left = section.querySelector(".leaf-left");
   const right = section.querySelector(".leaf-right");
 
-  // Initial setup
+  // Initial setup (open from corner)
   gsap.set(left, {
     scale: 0,
-    rotation: -20,
-    opacity: 0,         
-    transformOrigin: "bottom left"
+    opacity: 0,
+    transformOrigin: "left bottom"
   });
 
   gsap.set(right, {
     scale: 0,
-    rotation: 20,
-    opacity: 0,          
-    transformOrigin: "top right"
+    opacity: 0,
+    transformOrigin: "right top"
   });
 
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: section,
-      start: "top 80%",
-      toggleActions: "play none none none"
+      start: "top 50%",
+      end: "bottom 40%",
+      toggleActions: "play reverse play reverse",
+      markers: false
     }
   });
 
-  // Animate left leaf
   tl.to(left, {
     scale: 1,
-    rotation: 0,
-    opacity: 1,          
+    opacity: 1,
     duration: 1.2,
     ease: "power3.out"
   });
 
-  // Animate right leaf, overlapping timing
   tl.to(right, {
     scale: 1,
-    rotation: 0,
-    opacity: 1,        
+    opacity: 1,
     duration: 1.2,
     ease: "power3.out"
-  }, "-=1.0"); // overlap
+  }, "-=1.0");
 });

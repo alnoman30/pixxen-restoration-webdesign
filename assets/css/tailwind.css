@@ -841,18 +841,17 @@ html.lenis body {
 /*  */
 
 
-/* ============================= Restoration design css (Noman)============================ */
+/* ============================= Restoration design css (Noman) */
 .common-paragraph p {
     font-weight: 400 !important;
 }
 
 /* stack card */
-.restoration-card-wrapper {
-    position: relative;
-}
 
-.restoration-card {
-    will-change: transform, filter;
+
+.restoration-card-wrapper {
+  transform-origin: center top;
+  will-change: transform;
 }
 
 /* stack card */
