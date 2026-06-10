@@ -850,8 +850,11 @@ html.lenis body {
 
 
 .restoration-card-wrapper {
-  transform-origin: center top;
-  will-change: transform;
+    position: sticky;
+    will-change: transform;
+    transform-origin: top center;
+    overflow: hidden;
+    margin-bottom: 16px;
 }
 
 /* stack card */

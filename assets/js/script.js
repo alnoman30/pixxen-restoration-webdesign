@@ -1908,41 +1908,95 @@ document.addEventListener("DOMContentLoaded", () => {
 // Crd stack animation
 gsap.registerPlugin(ScrollTrigger);
 
-const cards = gsap.utils.toArray(".restoration-card-wrapper");
+(function initRestorationStack() {
 
-// set initial state once (IMPORTANT: no dynamic z-index)
-cards.forEach((card, i) => {
+  const cards = gsap.utils.toArray(".restoration-card-wrapper");
 
-  gsap.set(card, {
+  if (!cards.length) return;
+
+  // initial state
+  gsap.set(cards, {
     scale: 1,
-    rotateX: 0,
     y: 0,
-    transformPerspective: 1000,
-    transformOrigin: "center top",
-    zIndex: cards.length + i
+    rotateX: 0,
+    opacity: 1,
+    transformPerspective: 1200,
+    transformOrigin: "top center"
   });
 
-    gsap.to(card, {
-    scale: 0.98,
-    rotateX: -0.8,
-    y: -10,
-    opacity: 1,
-    ease: "none",
-    scrollTrigger: {
+  cards.forEach((card, i) => {
+
+    // entry animation
+    gsap.from(card, {
+      y: 80,
+      opacity: 0,
+      duration: 0.8,
+      ease: "back.out(1.5)",
+      scrollTrigger: {
         trigger: card,
-        start: "top 30%",
-        end: "bottom bottom",
-        scrub: true,
-        invalidateOnRefresh: true
-    }
+        start: "top 90%",
+        once: true
+      }
     });
 
-});
+    // stacking effect
+    ScrollTrigger.create({
+      trigger: card,
+      start: "top 25%",
+      end: "bottom top",
+      scrub: true,
 
-// optional: refresh fix for layout shifts/images/fonts
-window.addEventListener("load", () => {
+      onUpdate: self => {
+
+        const progress = self.progress;
+
+        // current card shrinks slightly
+        gsap.set(card, {
+          scale: 1 - progress * 0.04,
+          rotateX: progress * 4,
+          y: -progress * 20
+        });
+
+        // affect previous cards
+        cards.slice(0, i).forEach((prev, index) => {
+
+          const distance = i - index;
+
+          gsap.set(prev, {
+            scale: 1 - (distance * 0.03),
+            y: -(distance * 12),
+            opacity: 1
+          });
+
+        });
+
+      }
+    });
+
+    // hover effect
+    card.addEventListener("mouseenter", () => {
+      gsap.to(card, {
+        y: -8,
+        scale: 1.01,
+        duration: 0.3,
+        ease: "power2.out"
+      });
+    });
+
+    card.addEventListener("mouseleave", () => {
+      gsap.to(card, {
+        y: 0,
+        scale: 1,
+        duration: 0.4,
+        ease: "power2.out"
+      });
+    });
+
+  });
+
   ScrollTrigger.refresh();
-});
+
+})();
 
 
 // Half Circle SVG animation
